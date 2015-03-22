@@ -21,19 +21,32 @@ Contents
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
-- [Installation](#installation)
-- [Test](#test)
-- [Start Server Programmatically](#start-server-programmatically)
-- [Configuration](#configuration)
-- [Logging](#logging)
-- [Supported REST API](#supported-rest-api)
-- [Dependencies](#dependencies)
-- [Auth](#auth)
-- [Getting the Code](#getting-the-code)
-- [Testing](#testing)
-- [Travis-CI](#travis-ci)
-- [Future](#future)
-- [Credits](#credits)
+- [Installation
+](#installation)
+- [Test
+](#test)
+- [Start Server Programmatically
+](#start-server-programmatically)
+- [Configuration
+](#configuration)
+- [Logging
+](#logging)
+- [Supported REST API
+](#supported-rest-api)
+- [Dependencies
+](#dependencies)
+- [Auth
+](#auth)
+- [Getting the Code
+](#getting-the-code)
+- [Testing
+](#testing)
+- [Travis-CI
+](#travis-ci)
+- [Future
+](#future)
+- [Credits
+](#credits)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -171,7 +184,7 @@ Supported REST API requests:
 * `GET /<db>/<collection>?query=%7B%22isDone%22%3A%20false%7D&limit=2&skip=2` - Ability to add options to query (limit, skip, 
 etc)
 * `GET /<db>/<collection>/id` - Returns document with _id_
-* `POST /<db>/<collection>` - Insert new document in collection (document in POST body)
+* `POST /<db>/<collection>` - Insert new document in collection (document in POST body) [You may also POST files as multipart formdata]
 * `PUT /<db>/<collection>/id` - Update document with _id_ (updated document in PUT body)
 * `DELETE /<db>/<collection>/id` - Delete document with _id_
 
@@ -226,6 +239,23 @@ An example configuration `example config with auth.json` is included with a work
 
 ** Please note that mongodb exposes all databases in the server, including your secret authentication database. Move your auth database to a different server on the same machine or ensure MongoDB authentication is setup correctly. Work will be done in the future that allows particular databases to be whitelisted/blacklisted and not exposed. **
 
+File Upload
+----------------
+
+Add multer configuration to your server as:-
+```
+app.use(multer({
+              dest: './uploads/',
+              putSingleFilesInArray: true,
+              rename: function (fieldname, filename) {
+                return filename.replace(/\W+/g, '-').toLowerCase() + Date.now()
+              }
+        }));
+```
+Make sure that putSingleFilesInArray is set to true. For each uploaded file its path and size are persisted in mongodb collection as metadata. You can change this by editing `propertiesToPersist` in `lib/rest.js`
+
+For more options refer multer documentation at:
+  https://github.com/expressjs/multer
 
 Getting the Code
 ----------------
