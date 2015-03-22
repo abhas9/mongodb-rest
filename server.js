@@ -10,6 +10,7 @@
 
 var fs = require("fs");
 var path = require("path");
+var multer  = require('multer');
 var express = require('express');
 var extend = require("extend");
 
@@ -95,6 +96,13 @@ module.exports = {
     require('express-csv');
 
     app.use(require('body-parser')());
+    app.use(multer({
+              dest: './uploads/',
+              putSingleFilesInArray: true,
+              rename: function (fieldname, filename) {
+                return filename.replace(/\W+/g, '-').toLowerCase() + Date.now()
+              }
+            }));
 
     if (config.humanReadableOutput) {
       app.set('json spaces', 4);
